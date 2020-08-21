@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+
+import Item from './components/Item'
 
 function App() {
+  let [products, setProducts] = useState()
+
+  let getData = async () => {
+    let url = `http://localhost:4000/`
+    let getFetchData = await fetch(url).then(resul => resul.json())
+    setProducts(getFetchData)
+  }
+
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Burger-Quenn-rest</h1>
+      {products && products.data.map(product =>
+        <Item product={product} key={product.id} />
+      )}
     </div>
   );
 }
